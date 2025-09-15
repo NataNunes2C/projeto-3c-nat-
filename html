@@ -1,1 +1,67 @@
+// Variáveis globais
+let estrelaX = [];
+let estrelaY = [];
+let numEstrelas = 100;
+let laserY = 0;
+let atirando = false;
 
+function setup() {
+  createCanvas(600, 400);
+  
+  // Criando posições aleatórias para as estrelas
+  for (let i = 0; i < numEstrelas; i++) {
+    estrelaX.push(random(width));
+    estrelaY.push(random(height));
+  }
+}
+
+function draw() {
+  background(0); // Espaço escuro
+
+  // Desenhando as estrelas
+  fill(255);
+  noStroke();
+  for (let i = 0; i < numEstrelas; i++) {
+    circle(estrelaX[i], estrelaY[i], 2);
+  }
+
+  // Planeta no canto
+  fill(100, 150, 255);
+  circle(100, 300, 100); // Um planeta azul
+
+  // Nave controlada pelo mouse
+  drawSpaceship(mouseX, height - 50);
+
+  // Atirar laser
+  if (atirando) {
+    stroke(255, 0, 0);
+    strokeWeight(2);
+    line(mouseX, height - 50, mouseX, laserY);
+    
+    laserY -= 10;
+    
+    // Parar o laser quando sair da tela
+    if (laserY < 0) {
+      atirando = false;
+      laserY = height - 50;
+    }
+  }
+}
+
+function drawSpaceship(x, y) {
+  // Corpo da nave
+  fill(200);
+  noStroke();
+  ellipse(x, y, 40, 20);
+  
+  // Parte superior da nave
+  triangle(x - 20, y, x + 20, y, x, y - 20);
+}
+
+function keyPressed() {
+  if (key === ' ') { // Espaço para atirar
+    atirando = true;
+    laserY = height - 50;
+    console.log("Disparando laser!");
+  }
+}
